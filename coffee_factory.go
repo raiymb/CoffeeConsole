@@ -1,93 +1,130 @@
 package main
 
-type CoffeeFactory interface {
-	MakeCoffee() Coffee
+import (
+	"fmt"
+)
+
+type ICoffeeDrink interface {
+	setName(name string)
+	setStrength(strength int)
+	getName() string
+	getStrength() int
 }
 
-type CoffeeDetailsFactory interface {
-	GetCoffeeDetails() string
+type CoffeeDrink struct {
+	name     string
+	strength int
 }
 
-type EspressoFactory struct{}
-type LatteFactory struct{}
-type CappuccinoFactory struct{}
-type MochaFactory struct{}
-type AmericanoFactory struct{}
-
-type Coffee struct {
-	Name        string
-	Size        string
-	Ingredients []string
-	Intensity   string
-	Sweetness   string
+func (c *CoffeeDrink) setName(name string) {
+	c.name = name
 }
 
-func (f EspressoFactory) MakeCoffee() Coffee {
-	return Coffee{
-		Name:        "Эспрессо",
-		Size:        "Маленький",
-		Ingredients: []string{"кофе"},
-		Intensity:   "Средний",
-		Sweetness:   "Нет",
+func (c *CoffeeDrink) getName() string {
+	return c.name
+}
+
+func (c *CoffeeDrink) setStrength(strength int) {
+	c.strength = strength
+}
+
+func (c *CoffeeDrink) getStrength() int {
+	return c.strength
+}
+
+type Espresso struct {
+	CoffeeDrink
+}
+
+func newEspresso() ICoffeeDrink {
+	return &Espresso{
+		CoffeeDrink: CoffeeDrink{
+			name:     "Espresso",
+			strength: 5,
+		},
 	}
 }
 
-func (f LatteFactory) MakeCoffee() Coffee {
-	return Coffee{
-		Name:        "Латте",
-		Size:        "Средний",
-		Ingredients: []string{"кофе", "молоко"},
-		Intensity:   "Низкий",
-		Sweetness:   "Средний",
+type Latte struct {
+	CoffeeDrink
+}
+
+func newLatte() ICoffeeDrink {
+	return &Latte{
+		CoffeeDrink: CoffeeDrink{
+			name:     "Latte",
+			strength: 3,
+		},
 	}
 }
 
-func (f CappuccinoFactory) MakeCoffee() Coffee {
-	return Coffee{
-		Name:        "Капучино",
-		Size:        "Большой",
-		Ingredients: []string{"кофе", "молоко", "пена"},
-		Intensity:   "Высокий",
-		Sweetness:   "Нет",
+type Cappuccino struct {
+	CoffeeDrink
+}
+
+func newCappuccino() ICoffeeDrink {
+	return &Cappuccino{
+		CoffeeDrink: CoffeeDrink{
+			name:     "Cappuccino",
+			strength: 4,
+		},
 	}
 }
 
-func (f MochaFactory) MakeCoffee() Coffee {
-	return Coffee{
-		Name:        "Мокко",
-		Size:        "Средний",
-		Ingredients: []string{"кофе", "шоколад", "молоко"},
-		Intensity:   "Средний",
-		Sweetness:   "Высокий",
+type Americano struct {
+	CoffeeDrink
+}
+
+func newAmericano() ICoffeeDrink {
+	return &Americano{
+		CoffeeDrink: CoffeeDrink{
+			name:     "Americano",
+			strength: 2,
+		},
 	}
 }
 
-func (f AmericanoFactory) MakeCoffee() Coffee {
-	return Coffee{
-		Name:        "Американо",
-		Size:        "Большой",
-		Ingredients: []string{"кофе", "вода"},
-		Intensity:   "Средний",
-		Sweetness:   "Нет",
+type Mocha struct {
+	CoffeeDrink
+}
+
+func newMocha() ICoffeeDrink {
+	return &Mocha{
+		CoffeeDrink: CoffeeDrink{
+			name:     "Mocha",
+			strength: 3,
+		},
 	}
 }
 
-func (f EspressoFactory) GetCoffeeDetails() string {
-	return "Эспрессо - маленький размер, средняя интенсивность, без сладости."
+type Macchiato struct {
+	CoffeeDrink
 }
 
-func (f LatteFactory) GetCoffeeDetails() string {
-	return "Латте - средний размер, низкая интенсивность, средняя сладость."
+func newMacchiato() ICoffeeDrink {
+	return &Macchiato{
+		CoffeeDrink: CoffeeDrink{
+			name:     "Macchiato",
+			strength: 4,
+		},
+	}
 }
 
-func (f CappuccinoFactory) GetCoffeeDetails() string {
-	return "Капучино - большой размер, высокая интенсивность, без сладости."
-}
-
-func (f MochaFactory) GetCoffeeDetails() string {
-	return "Мокко - средний размер, средняя интенсивность, высокая сладость."
-}
-
-func (f AmericanoFactory) GetCoffeeDetails() string {
-	return "Американо - большой размер, средняя интенсивность, без сладости."
+func getCoffeeDrink(drinkType string) (ICoffeeDrink, error) {
+	switch drinkType {
+	case "espresso":
+		return newEspresso(), nil
+	case "latte":
+		return newLatte(), nil
+	case "cappuccino":
+		return newCappuccino(), nil
+	case "americano":
+		return newAmericano(), nil
+	case "mocha":
+		return newMocha(), nil
+	case "macchiato":
+		return newMacchiato(), nil
+	default:
+		return nil, fmt.Errorf("Wrong coffee drink type passed")
+	}
 }
