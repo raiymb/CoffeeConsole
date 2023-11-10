@@ -4,11 +4,15 @@ type CoffeeFactory interface {
 	MakeCoffee() Coffee
 }
 
-type Espresso struct{}
-type Latte struct{}
-type Cappuccino struct{}
-type Mocha struct{}
-type Americano struct{}
+type CoffeeDetailsFactory interface {
+	GetCoffeeDetails() string
+}
+
+type EspressoFactory struct{}
+type LatteFactory struct{}
+type CappuccinoFactory struct{}
+type MochaFactory struct{}
+type AmericanoFactory struct{}
 
 type Coffee struct {
 	Name        string
@@ -18,7 +22,7 @@ type Coffee struct {
 	Sweetness   string
 }
 
-func (f Espresso) MakeCoffee() Coffee {
+func (f EspressoFactory) MakeCoffee() Coffee {
 	return Coffee{
 		Name:        "Эспрессо",
 		Size:        "Маленький",
@@ -28,7 +32,7 @@ func (f Espresso) MakeCoffee() Coffee {
 	}
 }
 
-func (f Latte) MakeCoffee() Coffee {
+func (f LatteFactory) MakeCoffee() Coffee {
 	return Coffee{
 		Name:        "Латте",
 		Size:        "Средний",
@@ -38,7 +42,7 @@ func (f Latte) MakeCoffee() Coffee {
 	}
 }
 
-func (f Cappuccino) MakeCoffee() Coffee {
+func (f CappuccinoFactory) MakeCoffee() Coffee {
 	return Coffee{
 		Name:        "Капучино",
 		Size:        "Большой",
@@ -48,7 +52,7 @@ func (f Cappuccino) MakeCoffee() Coffee {
 	}
 }
 
-func (f Mocha) MakeCoffee() Coffee {
+func (f MochaFactory) MakeCoffee() Coffee {
 	return Coffee{
 		Name:        "Мокко",
 		Size:        "Средний",
@@ -58,7 +62,7 @@ func (f Mocha) MakeCoffee() Coffee {
 	}
 }
 
-func (f Americano) MakeCoffee() Coffee {
+func (f AmericanoFactory) MakeCoffee() Coffee {
 	return Coffee{
 		Name:        "Американо",
 		Size:        "Большой",
@@ -66,4 +70,24 @@ func (f Americano) MakeCoffee() Coffee {
 		Intensity:   "Средний",
 		Sweetness:   "Нет",
 	}
+}
+
+func (f EspressoFactory) GetCoffeeDetails() string {
+	return "Эспрессо - маленький размер, средняя интенсивность, без сладости."
+}
+
+func (f LatteFactory) GetCoffeeDetails() string {
+	return "Латте - средний размер, низкая интенсивность, средняя сладость."
+}
+
+func (f CappuccinoFactory) GetCoffeeDetails() string {
+	return "Капучино - большой размер, высокая интенсивность, без сладости."
+}
+
+func (f MochaFactory) GetCoffeeDetails() string {
+	return "Мокко - средний размер, средняя интенсивность, высокая сладость."
+}
+
+func (f AmericanoFactory) GetCoffeeDetails() string {
+	return "Американо - большой размер, средняя интенсивность, без сладости."
 }

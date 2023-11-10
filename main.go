@@ -8,11 +8,11 @@ import (
 func main() {
 	cafe := GetCafeInstance()
 
-	cafe.Menu["эспрессо"] = Espresso{}
-	cafe.Menu["латте"] = Latte{}
-	cafe.Menu["капучино"] = Cappuccino{}
-	cafe.Menu["мокко"] = Mocha{}
-	cafe.Menu["американо"] = Americano{}
+	cafe.Menu["эспрессо"] = EspressoFactory{}
+	cafe.Menu["латте"] = LatteFactory{}
+	cafe.Menu["капучино"] = CappuccinoFactory{}
+	cafe.Menu["мокко"] = MochaFactory{}
+	cafe.Menu["американо"] = AmericanoFactory{}
 
 	fmt.Println("Добро пожаловать в нашу кофейню! Выберите напиток из меню:")
 
