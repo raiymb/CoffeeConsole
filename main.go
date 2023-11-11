@@ -7,10 +7,12 @@ import (
 
 func main() {
 	cafe := GetCafeInstance()
+
 	fmt.Println("Welcome to the cafe!")
 	fmt.Println("Can you tell me your name?")
 	var name string
 	fmt.Scanln(&name)
+
 	for {
 		fmt.Println("Choose an option:")
 		fmt.Println("1. Place an order")
@@ -36,18 +38,19 @@ func main() {
 				}
 				coffeeOrder := CoffeeOrder{Order: order}
 
-				// Creating observers (customers)
-				customer4 := Customer{Name: name}
+				customerUser := Customer{Name: name}
 				customer1 := Customer{Name: "Raiymbek"}
 				customer2 := Customer{Name: "Miras"}
 				customer3 := Customer{Name: "Aisultan"}
+
 				time.Sleep(3 * time.Second)
 				coffeeOrder.ChangeStatus("Ready")
-				coffeeOrder.RegisterObserver(customer4)
+				coffeeOrder.RegisterObserver(customerUser)
 				coffeeOrder.RegisterObserver(customer1)
 				coffeeOrder.RegisterObserver(customer2)
 				coffeeOrder.RegisterObserver(customer3)
 				coffeeOrder.ChangeStatus("Ready")
+
 				cafe.Orders = append(cafe.Orders, coffeeOrder.Order)
 				fmt.Println("Order placed successfully!")
 			}
@@ -65,19 +68,43 @@ func main() {
 				}
 			}
 		case 3:
-			fmt.Println("Apply decorator to a coffee - Enter 'simple' to view simple coffee or 'cinnamon' for coffee with cinnamon:")
+			fmt.Println("Apply decorator to a coffee - Enter 'simple' for a plain coffee or 'cinnamon' for coffee with cinnamon:")
 			var decoratorChoice string
 			fmt.Scanln(&decoratorChoice)
 
-			if decoratorChoice == "simple" {
+			var coffeeWithDecorator CoffeeIngredient
+
+			switch decoratorChoice {
+			case "simple":
 				simpleCoffee := SimpleCoffee{Ingredients: []string{"coffee"}}
-				fmt.Println("Simple Coffee Ingredients:", simpleCoffee.GetIngredients())
-			} else if decoratorChoice == "cinnamon" {
+				coffeeWithDecorator = simpleCoffee
+			case "cinnamon":
 				simpleCoffee := SimpleCoffee{Ingredients: []string{"coffee"}}
 				cinnamonCoffee := CinnamonDecorator{BaseDecorator{&simpleCoffee}}
-				fmt.Println("Coffee with Cinnamon Ingredients:", cinnamonCoffee.GetIngredients())
-			} else {
+				coffeeWithDecorator = cinnamonCoffee
+			case "milk":
+				simpleCoffee := SimpleCoffee{Ingredients: []string{"coffee"}}
+				milkCoffee := MilkDecorator{BaseDecorator{&simpleCoffee}}
+				coffeeWithDecorator = milkCoffee
+			case "chocolate":
+				simpleCoffee := SimpleCoffee{Ingredients: []string{"coffee"}}
+				chocolateCoffee := ChocolateDecorator{BaseDecorator{&simpleCoffee}}
+				coffeeWithDecorator = chocolateCoffee
+			case "sugar":
+				simpleCoffee := SimpleCoffee{Ingredients: []string{"coffee"}}
+				sugarCoffee := SugarDecorator{BaseDecorator{&simpleCoffee}}
+				coffeeWithDecorator = sugarCoffee
+			case "syrup":
+				simpleCoffee := SimpleCoffee{Ingredients: []string{"coffee"}}
+				syrupCoffee := SyrupDecorator{BaseDecorator{&simpleCoffee}, "Vanilla"} // Change "Vanilla" as needed
+				coffeeWithDecorator = syrupCoffee
+			default:
 				fmt.Println("Invalid choice!")
+				continue
+			}
+
+			if coffeeWithDecorator != nil {
+				fmt.Println("Coffee Ingredients with the selected decorator:", coffeeWithDecorator.GetIngredients())
 			}
 		case 4:
 			fmt.Println("Exiting the cafe. Goodbye!")
